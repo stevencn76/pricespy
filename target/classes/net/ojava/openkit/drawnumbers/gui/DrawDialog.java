@@ -1,0 +1,200 @@
+package net.ojava.openkit.drawnumbers.gui;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
+
+import net.ojava.openkit.drawnumbers.core.AwardItem;
+import net.ojava.openkit.drawnumbers.core.DrawNumbers;
+import net.ojava.openkit.drawnumbers.res.Resource;
+
+public class DrawDialog extends JDialog {
+	private static final long serialVersionUID = 1L;
+	
+	private static final int S_DRAWING = 1;
+	private static final int S_END = 2;
+	private int status = S_DRAWING;
+	
+	private JTextArea resultArea = new JTextArea(6, 30);
+	private JButton okBtn = new JButton("ok");
+	
+	private Set<Integer> awardSet = new HashSet<Integer>();
+	private Object awardLock = new Object();
+	
+	private class DrawThread extends Thread {
+		public volatile boolean stop = false;
+		public void run() {
+			AwardItem item = DrawNumbers.getInstance().nextAwardItem();
+			if(item != null) {
+				while(!stop) {
+					generateAward();
+					
+					try {
+						Thread.sleep(50);
+					} catch (Exception e){}
+				}
+			}
+		}
+	}
+	
+	private DrawThread drawThread = null;
+	
+	public DrawDialog(JFrame parent) {
+		super(parent, Resource.getInstance().getResourceString(Resource.KEY_TITLE_DRAWING), true);
+		
+		initComponents();
+		initEvents();
+	}
+	
+	private void initComponents() {
+		JPanel cp = new JPanel();
+		cp.setLayout(new BorderLayout(5, 5));
+		cp.setBorder(new EmptyBorder(5, 7, 7, 7));
+		this.setContentPane(cp);
+		
+		resultArea.setBackground(Color.LIGHT_GRAY);
+		resultArea.setForeground(Color.BLUE);
+		resultArea.setFont(new Font("宋 体", Font.BOLD, 32));
+		resultArea.setLineWrap(true);
+		resultArea.setWrapStyleWord(true);
+		resultArea.setEditable(false);
+		
+		cp.add(new JScrollPane(resultArea));
+		
+		JPanel bp = new JPanel();
+		bp.setLayout(new FlowLayout(FlowLayout.CENTER));
+		bp.setBorder(new EmptyBorder(5, 5, 5, 5));
+		cp.add(bp, BorderLayout.SOUTH);
+		
+		bp.add(okBtn);
+		
+		this.pack();
+		this.setLocationRelativeTo(this.getParent());
+	}
+	
+	private void initEvents() {
+		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE) ;
+		
+		okBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				doOk();
+			}
+		});
+	}
+	
+	public void open() {
+		AwardItem item = DrawNumbers.getInstance().nextAwardItem();
+		if(item == null) {
+			status = S_END;
+			okBtn.setText(Resource.getInstance().getResourceString(Resource.KEY_LABEL_CLOSE));
+		} else {
+			if(DrawNumbers.getInstance().getNumberPool().size() <= item.getLuckyCount()) {
+				generateAward();
+				sureAward();
+
+				status = S_END;
+				okBtn.setText(Resource.getInstance().getResourceString(Resource.KEY_LABEL_CLOSE));
+			} else {
+				if(drawThread != null) {
+					drawThread.stop = true;
+					try {
+						drawThread.join();
+					} catch (Exception e){}
+				}
+				drawThread = new DrawThread();
+				drawThread.start();
+				status = S_DRAWING;
+				okBtn.setText(Resource.getInstance().getResourceString(Resource.KEY_LABEL_STOP));
+			}
+		}
+		
+		this.setVisible(true);
+	}
+	
+	private void stopDrawing() {
+		drawThread.stop = true;
+		try {
+			drawThread.join();
+		} catch (Exception e){}
+		
+		sureAward();
+	}
+	
+	private void doOk() {
+		switch(status) {
+		case S_DRAWING:
+			if(drawThread != null) {
+				stopDrawing();
+				okBtn.setText(Resource.getInstance().getResourceString(Resource.KEY_LABEL_CLOSE));
+				
+				status = S_END;
+			}
+			break;
+		case S_END:
+			this.dispose();
+			break;
+		}
+	}
+
+	private void generateAward() {
+		AwardItem item = DrawNumbers.getInstance().nextAwardItem();
+		if(item == null)
+			return;
+		
+		synchronized(awardLock) {
+			awardSet.clear();
+			List<Integer> numbers = DrawNumbers.getInstance().getNumberPool();
+			
+			for(int i=0; i<item.getLuckyCount()&&numbers.size() > 0; i++) {
+				int id = (int)(Math.random() * numbers.size());
+				
+				awardSet.add(numbers.remove(id));
+			}
+		}
+		
+		updateResult();
+	}
+	
+	private void updateResult() {
+		final StringBuffer sb = new StringBuffer();
+		synchronized(awardLock) {
+			int count = 0;
+			for(Integer ti : awardSet) {
+				if(count > 0)
+					sb.append(", ");
+				
+				sb.append(ti);
+				count++;
+			}
+		}
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				resultArea.setText(sb.toString());
+			}
+		});
+	}
+	
+	private void sureAward() {
+		synchronized(awardLock) {
+			DrawNumbers.getInstance().completeAwardItem(awardSet);
+		}
+	}
+}
