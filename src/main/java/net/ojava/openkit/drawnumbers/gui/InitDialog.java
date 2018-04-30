@@ -31,7 +31,7 @@ import net.ojava.openkit.drawnumbers.util.StrUtil;
 public class InitDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private JLabel numberLabel = new JLabel(Resource.getInstance().getResourceString(Resource.KEY_LABEL_POOLNUMS));
-	private JTextArea numberArea = new JTextArea(10, 100);
+	private JTextArea numberArea = new JTextArea(20, 60);
 	
 	private JLabel awardLabel = new JLabel(Resource.getInstance().getResourceString(Resource.KEY_LABEL_AWARDS));
 	private JTextField awardField = new JTextField(100);
@@ -59,7 +59,7 @@ public class InitDialog extends JDialog {
 		cp.setBorder(new EmptyBorder(5, 7, 7, 7));
 		
 		cp.add(numberLabel, BorderLayout.NORTH);
-		cp.add(new JScrollPane(numberArea));
+		cp.add(new JScrollPane(numberArea), BorderLayout.CENTER);
 
 		JPanel subPanel = new JPanel();
 		cp.add(subPanel, BorderLayout.SOUTH);
@@ -76,9 +76,10 @@ public class InitDialog extends JDialog {
 		p3.add(cancelBtn);
 		
 		numberArea.setText("1-87");
+		numberArea.setLineWrap(true);
 		awardField.setText(Resource.getInstance().getResourceString(Resource.KEY_SAMPLE_AWARDS));
 		
-		this.pack();
+		this.setSize(800, 500);
 		this.setLocationRelativeTo(this.getParent());
 	}
 	

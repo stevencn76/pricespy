@@ -14,6 +14,7 @@ public class Resource {
 	private static Logger log = Logger.getLogger(Resource.class);
 	
 	public static final String KEY_APPNAME = "APP.NAME";
+	public static final String KEY_APPTITLE = "APP.TITLE";
 	public static final String KEY_APPVERSION = "APP.VERSION";
 	public static final String KEY_APPRELEASEDATE = "APP.RELEASEDATE";
 	

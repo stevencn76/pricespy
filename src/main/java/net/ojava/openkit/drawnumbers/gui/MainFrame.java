@@ -13,9 +13,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -26,11 +23,17 @@ import net.ojava.openkit.drawnumbers.res.Resource;
 
 public class MainFrame extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private JMenuItem initMenuItem = new JMenuItem(Resource.getInstance().getResourceString(Resource.KEY_LABEL_AWARDSETTING));
-	private JMenuItem viewMenuItem = new JMenuItem(Resource.getInstance().getResourceString(Resource.KEY_LABEL_VIEWPOOLNUMS));
+	private JButton initBtn = new JButton(Resource.getInstance().getResourceString(Resource.KEY_LABEL_AWARDSETTING));
+	private JButton viewResultBtn = new JButton(Resource.getInstance().getResourceString(Resource.KEY_LABEL_VIEWPOOLNUMS));
 	private JTextArea resultArea = new JTextArea();
 	private JLabel curAwardField = new JLabel("                ");
+	private JLabel titleLabel = new JLabel(Resource.getInstance().getResourceString(Resource.KEY_APPTITLE));
 	private JButton drawBtn = new JButton(Resource.getInstance().getResourceString(Resource.KEY_LABEL_DRAW));
+	
+	private static Color TITLE_FONT_COLOR = new Color(251, 167, 68);
+	private static Color SUBTITLE_FONT_COLOR = new Color(236, 254, 255);
+	private static Color CONTENT_FONT_COLOR = new Color(133, 128, 221);
+	private static Color CONTENT_BG_COLOR = Color.WHITE;
 	
 	public MainFrame() {
 		super(Resource.getInstance().getResourceString(Resource.KEY_APPNAME));
@@ -40,42 +43,42 @@ public class MainFrame extends JFrame implements ActionListener {
 	}
 	
 	private void initComponents() {
-		JMenuBar menuBar = new JMenuBar();
-		
-		JMenu systemMenu = new JMenu(Resource.getInstance().getResourceString(Resource.KEY_LABEL_SYSTEM));
-		menuBar.add(systemMenu);
-		systemMenu.add(initMenuItem);
-		systemMenu.addSeparator();
-		systemMenu.add(viewMenuItem);
-		
-		this.setJMenuBar(menuBar);
-		
 		resultArea.setEditable(false);
-		resultArea.setBackground(new Color(68, 101, 122));
-		resultArea.setForeground(new Color(218, 224, 22));
-		resultArea.setFont(new Font("宋 体", Font.BOLD, 45));
+		resultArea.setBackground(CONTENT_BG_COLOR);
+		resultArea.setForeground(CONTENT_FONT_COLOR);
+		resultArea.setFont(new Font("宋 体", Font.BOLD, 32));
 		resultArea.setLineWrap(true);
 		resultArea.setWrapStyleWord(true);
 		resultArea.setText(Resource.getInstance().getResourceString(Resource.KEY_TIP_SETNUMSANDAWARDS));
 		this.getContentPane().add(new JScrollPane(resultArea));
 		
 		GradientPanel p1 = new GradientPanel();
-		p1.setLayout(new FlowLayout(FlowLayout.CENTER));
+		p1.setLayout(new BorderLayout(5, 5));
 		this.getContentPane().add(p1, BorderLayout.NORTH);
 		p1.setOpaque(true);
 		
 		JPanel p2 = new JPanel();
-		p2.setLayout(new BorderLayout(5, 5));
+		p2.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 		p2.add(curAwardField);
-		p2.add(drawBtn, BorderLayout.EAST);
+		p2.add(drawBtn);
+		p2.add(initBtn);
+		p2.add(viewResultBtn);
 		p2.setOpaque(false);
 
 		drawBtn.setEnabled(false);
 		
 		p1.add(p2);
+		
+		p1.add(titleLabel, BorderLayout.NORTH);
+		
 		curAwardField.setOpaque(false);
-		curAwardField.setForeground(Color.WHITE);
-		curAwardField.setFont(new Font("宋 体", Font.BOLD, 32));
+		curAwardField.setForeground(SUBTITLE_FONT_COLOR);
+		curAwardField.setFont(new Font("宋 体", Font.BOLD, 36));
+
+		titleLabel.setOpaque(false);
+		titleLabel.setForeground(TITLE_FONT_COLOR);
+		titleLabel.setFont(new Font("宋 体", Font.BOLD, 36));
+		titleLabel.setHorizontalAlignment(JLabel.CENTER);
 		
 		this.setSize(new Dimension(1204, 768));
 		this.setExtendedState( this.getExtendedState()|JFrame.MAXIMIZED_BOTH );
@@ -89,16 +92,16 @@ public class MainFrame extends JFrame implements ActionListener {
 			}
 		});
 		
-		initMenuItem.addActionListener(this);
-		viewMenuItem.addActionListener(this);
+		initBtn.addActionListener(this);
+		viewResultBtn.addActionListener(this);
 		drawBtn.addActionListener(this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == initMenuItem) {
+		if(e.getSource() == initBtn) {
 			doInitNumberPool();
-		} else if(e.getSource() == viewMenuItem) {
+		} else if(e.getSource() == viewResultBtn) {
 			doViewNumberPool();
 		} else if(e.getSource() == drawBtn) {
 			doDraw();
