@@ -1,9 +1,7 @@
 package net.ojava.openkit.drawnumbers.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashSet;
@@ -14,8 +12,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
@@ -31,7 +27,7 @@ public class DrawDialog extends JDialog {
 	private static final int S_END = 2;
 	private int status = S_DRAWING;
 	
-	private JTextArea resultArea = new JTextArea(6, 30);
+	private NumbersPanel resultPanel = new NumbersPanel(10);
 	private JButton okBtn = new JButton("ok");
 	
 	private Set<Integer> awardSet = new HashSet<Integer>();
@@ -68,14 +64,7 @@ public class DrawDialog extends JDialog {
 		cp.setBorder(new EmptyBorder(5, 7, 7, 7));
 		this.setContentPane(cp);
 		
-		resultArea.setBackground(Color.LIGHT_GRAY);
-		resultArea.setForeground(Color.BLUE);
-		resultArea.setFont(new Font("宋 体", Font.BOLD, 32));
-		resultArea.setLineWrap(true);
-		resultArea.setWrapStyleWord(true);
-		resultArea.setEditable(false);
-		
-		cp.add(new JScrollPane(resultArea));
+		cp.add(resultPanel);
 		
 		JPanel bp = new JPanel();
 		bp.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -84,7 +73,7 @@ public class DrawDialog extends JDialog {
 		
 		bp.add(okBtn);
 		
-		this.pack();
+		this.setSize(800, 600);
 		this.setLocationRelativeTo(this.getParent());
 	}
 	
@@ -173,21 +162,9 @@ public class DrawDialog extends JDialog {
 	}
 	
 	private void updateResult() {
-		final StringBuffer sb = new StringBuffer();
-		synchronized(awardLock) {
-			int count = 0;
-			for(Integer ti : awardSet) {
-				if(count > 0)
-					sb.append(", ");
-				
-				sb.append(ti);
-				count++;
-			}
-		}
-		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				resultArea.setText(sb.toString());
+				resultPanel.updateNumbers(awardSet);
 			}
 		});
 	}
