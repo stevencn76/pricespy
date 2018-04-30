@@ -12,14 +12,13 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 
 import net.ojava.openkit.drawnumbers.core.AwardItem;
 import net.ojava.openkit.drawnumbers.core.DrawNumbers;
@@ -30,7 +29,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JMenuItem initMenuItem = new JMenuItem(Resource.getInstance().getResourceString(Resource.KEY_LABEL_AWARDSETTING));
 	private JMenuItem viewMenuItem = new JMenuItem(Resource.getInstance().getResourceString(Resource.KEY_LABEL_VIEWPOOLNUMS));
 	private JTextArea resultArea = new JTextArea();
-	private JTextField curAwardField = new JTextField(16);
+	private JLabel curAwardField = new JLabel("                ");
 	private JButton drawBtn = new JButton(Resource.getInstance().getResourceString(Resource.KEY_LABEL_DRAW));
 	
 	public MainFrame() {
@@ -52,34 +51,31 @@ public class MainFrame extends JFrame implements ActionListener {
 		this.setJMenuBar(menuBar);
 		
 		resultArea.setEditable(false);
-		resultArea.setBackground(Color.LIGHT_GRAY);
-		resultArea.setForeground(Color.BLUE);
+		resultArea.setBackground(new Color(68, 101, 122));
+		resultArea.setForeground(new Color(218, 224, 22));
 		resultArea.setFont(new Font("宋 体", Font.BOLD, 45));
 		resultArea.setLineWrap(true);
 		resultArea.setWrapStyleWord(true);
 		resultArea.setText(Resource.getInstance().getResourceString(Resource.KEY_TIP_SETNUMSANDAWARDS));
 		this.getContentPane().add(new JScrollPane(resultArea));
 		
-		JPanel p1 = new JPanel();
+		GradientPanel p1 = new GradientPanel();
 		p1.setLayout(new FlowLayout(FlowLayout.CENTER));
 		this.getContentPane().add(p1, BorderLayout.NORTH);
+		p1.setOpaque(true);
 		
 		JPanel p2 = new JPanel();
 		p2.setLayout(new BorderLayout(5, 5));
 		p2.add(curAwardField);
 		p2.add(drawBtn, BorderLayout.EAST);
+		p2.setOpaque(false);
 
 		drawBtn.setEnabled(false);
 		
 		p1.add(p2);
-		Color bc = new Color(229, 164, 8);
-		p1.setBackground(bc);
-		p2.setBackground(bc);
-		curAwardField.setBackground(bc);
+		curAwardField.setOpaque(false);
 		curAwardField.setForeground(Color.WHITE);
 		curAwardField.setFont(new Font("宋 体", Font.BOLD, 32));
-		curAwardField.setBorder(new EmptyBorder(0, 0, 0, 0));
-		curAwardField.setEditable(false);
 		
 		this.setSize(new Dimension(1204, 768));
 		this.setExtendedState( this.getExtendedState()|JFrame.MAXIMIZED_BOTH );
