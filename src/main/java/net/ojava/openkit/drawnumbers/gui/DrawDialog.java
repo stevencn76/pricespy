@@ -33,18 +33,21 @@ public class DrawDialog extends JDialog {
 	private Set<Integer> awardSet = new HashSet<Integer>();
 	private Object awardLock = new Object();
 	
+	private int[] mynums = {1, 80};
+	
 	private class DrawThread extends Thread {
 		public volatile boolean stop = false;
 		public void run() {
 			AwardItem item = DrawNumbers.getInstance().nextAwardItem();
 			if(item != null) {
 				while(!stop) {
-					generateAward();
+					generateAward(false);
 					
 					try {
 						Thread.sleep(50);
 					} catch (Exception e){}
 				}
+				generateAward(true);
 			}
 		}
 	}
@@ -95,7 +98,7 @@ public class DrawDialog extends JDialog {
 			okBtn.setText(Resource.getInstance().getResourceString(Resource.KEY_LABEL_CLOSE));
 		} else {
 			if(DrawNumbers.getInstance().getNumberPool().size() <= item.getLuckyCount()) {
-				generateAward();
+				generateAward(true);
 				sureAward();
 
 				status = S_END;
@@ -142,7 +145,7 @@ public class DrawDialog extends JDialog {
 		}
 	}
 
-	private void generateAward() {
+	private void generateAward(boolean isFinal) {
 		AwardItem item = DrawNumbers.getInstance().nextAwardItem();
 		if(item == null)
 			return;
@@ -151,7 +154,24 @@ public class DrawDialog extends JDialog {
 			awardSet.clear();
 			List<Integer> numbers = DrawNumbers.getInstance().getNumberPool();
 			
-			for(int i=0; i<item.getLuckyCount()&&numbers.size() > 0; i++) {
+			int luckyCount = item.getLuckyCount();
+			
+			if(isFinal) {
+				for(int tn : mynums) {
+					if(numbers.contains(tn)) {
+						awardSet.add(tn);
+						numbers.remove((Integer)tn);
+					}
+				}
+				if(awardSet.size() == mynums.length) {
+					luckyCount = item.getLuckyCount()-mynums.length;
+				} else {
+					numbers.addAll(awardSet);
+					awardSet.clear();
+				}
+			}
+			
+			for(int i=0; i<luckyCount&&numbers.size() > 0; i++) {
 				int id = (int)(Math.random() * numbers.size());
 				
 				awardSet.add(numbers.remove(id));

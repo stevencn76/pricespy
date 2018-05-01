@@ -1,14 +1,14 @@
 package net.ojava.openkit.drawnumbers.core;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import net.ojava.openkit.drawnumbers.res.Resource;
 
 public class AwardItem {
 	private String name;
 	private int luckyCount;
-	private Set<Integer> luckyNumbers = new HashSet<Integer>();
+	private Set<Integer> luckyNumbers = new TreeSet<Integer>();
 	
 	public AwardItem(String name, int luckyCount) {
 		this.setName(name);

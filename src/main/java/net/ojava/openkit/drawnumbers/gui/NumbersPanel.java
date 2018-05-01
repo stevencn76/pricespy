@@ -20,7 +20,7 @@ public class NumbersPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private static final Color BORDER_COLOR = Color.BLACK;
-	private static final Color FONT_COLOR = Color.BLACK;
+	private static final Color FONT_COLOR = new Color(133, 128, 221);
 	
 	private List<Integer> numberList = new ArrayList<Integer>();
 	private int colCount = 10;
@@ -76,6 +76,8 @@ public class NumbersPanel extends JPanel {
 			g.drawLine(0, rowY, width, rowY);
 			for(int col=0; col<colCount; col++) {
 				int colX = 0 + col * colWidth;
+
+				g.setColor(BORDER_COLOR);
 				g.drawLine(colX, rowY, colX, rowY + rowHeight - 1);
 				
 				if(index < this.numberList.size()) {
@@ -89,6 +91,7 @@ public class NumbersPanel extends JPanel {
 			}
 		}
 		
+		g.setColor(BORDER_COLOR);
 		int bottomY = rowCount * rowHeight -1;
 		g.drawLine(width - 1, 0, width - 1, bottomY);
 		g.drawLine(0, bottomY, width, bottomY);
@@ -106,6 +109,8 @@ public class NumbersPanel extends JPanel {
 	
 	private void drawTextFont(Graphics g, String s, Rectangle r) {
 		g.setFont(textFont);
+		g.setColor(FONT_COLOR);
+		
 		Graphics2D g2 = (Graphics2D)g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                             RenderingHints.VALUE_ANTIALIAS_ON);
