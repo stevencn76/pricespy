@@ -1,4 +1,4 @@
-package net.ojava.openkit.drawnumbers;
+package net.ojava.openkit.pricespy;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
