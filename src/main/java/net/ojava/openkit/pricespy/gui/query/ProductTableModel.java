@@ -110,4 +110,12 @@ public class ProductTableModel extends AbstractTableModel {
 		
 		return null;
 	}
+	
+	public void updateProduct(int index, Product product) {
+		if (index >= 0 && index < getRowCount()) {
+			itemList.set(index, product);
+			
+			this.fireTableRowsUpdated(index, index);
+		}
+	}
 }

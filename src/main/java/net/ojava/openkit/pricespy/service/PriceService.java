@@ -18,6 +18,7 @@ public interface PriceService {
 	public List<StoreProp> findStoreProps(Store store) throws Exception;
 	
 	public Product createProduct(Product product) throws Exception;
+	public Product saveProduct(Product product) throws Exception;
 	public List<Product> findProducts(String[] namePattern) throws Exception;
 	public long getProductCount(Store store) throws Exception;
 	public void clearProducts(Store store) throws Exception;

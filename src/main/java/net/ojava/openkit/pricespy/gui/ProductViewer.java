@@ -26,7 +26,7 @@ public class ProductViewer extends JLabel {
 		this.setPreferredSize(new Dimension(300, 300));
 	}
 	
-	public void setProduct(Product product) {
+	public void setProduct(Product product, boolean updatePic) {
 		this.setText(" ");
 		this.setIcon(null);
 		
@@ -38,7 +38,7 @@ public class ProductViewer extends JLabel {
 		String fileName = product.getStore().getId() + "-" + product.getNumber() + ".jpg";
 		File imgFile = new File(Resource.getInstance().getImgPath(), fileName);
 		
-		if (imgFile.exists()) {
+		if (!updatePic && imgFile.exists()) {
 			try {
 				ImageIcon imgIcon = new ImageIcon(imgFile.toURI().toURL());
 				updateImage(imgIcon);

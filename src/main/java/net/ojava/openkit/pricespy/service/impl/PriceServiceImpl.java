@@ -87,6 +87,21 @@ public class PriceServiceImpl implements PriceService {
 			return product;
 		}
 	}
+	
+	@Override
+	public Product saveProduct(Product product) throws Exception {
+		if (product.getStore() == null || product.getStore().getId() == null)
+			throw new Exception("No store assigned for product");
+		
+		Store store = storeDao.findById(product.getStore().getId());
+		if (store == null) 
+			throw new Exception("Store does not exist, id: " + product.getStore().getId());
+		
+		product.setStore(store);
+		productDao.saveOrUpdate(product);
+		
+		return product;
+	}
 
 	@Override
 	public List<Product> findProducts(String[] namePattern) throws Exception {
