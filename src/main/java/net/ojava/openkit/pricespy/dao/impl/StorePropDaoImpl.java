@@ -11,7 +11,6 @@ import net.ojava.openkit.pricespy.dao.StorePropDao;
 import net.ojava.openkit.pricespy.entity.Store;
 import net.ojava.openkit.pricespy.entity.StoreProp;
 
-@SuppressWarnings("unchecked")
 @Repository("storePropDao")
 public class StorePropDaoImpl extends BaseDaoHibernate<StoreProp> implements StorePropDao {
 
@@ -20,7 +19,7 @@ public class StorePropDaoImpl extends BaseDaoHibernate<StoreProp> implements Sto
 		DetachedCriteria c = DetachedCriteria.forClass(StoreProp.class)
 				.add(Restrictions.eq("store", store))
 				.add(Restrictions.eq("name", name));
-		List<StoreProp> storePropList = this.getHibernateTemplate().findByCriteria(c);
+		List<StoreProp> storePropList = this.findByCriteria(c);
 		
 		if (storePropList != null && storePropList.size() > 0)
 			return storePropList.get(0);
@@ -33,7 +32,7 @@ public class StorePropDaoImpl extends BaseDaoHibernate<StoreProp> implements Sto
 	public List<StoreProp> findByStore(Store store) throws Exception {
 		DetachedCriteria c = DetachedCriteria.forClass(StoreProp.class)
 				.add(Restrictions.eq("store", store));
-		List<StoreProp> storePropList = this.getHibernateTemplate().findByCriteria(c);
+		List<StoreProp> storePropList = this.findByCriteria(c);
 		
 		if (storePropList != null && storePropList.size() > 0)
 			return storePropList;

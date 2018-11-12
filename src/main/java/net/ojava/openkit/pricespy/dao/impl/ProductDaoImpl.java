@@ -3,9 +3,11 @@ package net.ojava.openkit.pricespy.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +18,6 @@ import net.ojava.openkit.pricespy.entity.Store;
 
 @Repository("productDao")
 public class ProductDaoImpl extends BaseDaoHibernate<Product> implements ProductDao {
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Product> findProductByName(String[] namePattern) {
 		List<Criterion> criterionList = new ArrayList<>();
@@ -47,16 +48,15 @@ public class ProductDaoImpl extends BaseDaoHibernate<Product> implements Product
 			c.add(combinedCriterion);
 		}
 		c.addOrder(Order.asc("name"));
-		return this.getMyHibernateTemplate().findByCriteria(c);
+		return this.findByCriteria(c);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Product findProduct(Store store, String number) {
 		DetachedCriteria c = DetachedCriteria.forClass(Product.class)
 				.add(Restrictions.eq("store", store))
 				.add(Restrictions.eq("number", number));
-		List<Product> productList = this.getHibernateTemplate().findByCriteria(c);
+		List<Product> productList = this.findByCriteria(c);
 		
 		if (productList != null && productList.size() > 0)
 			return productList.get(0);
@@ -66,11 +66,15 @@ public class ProductDaoImpl extends BaseDaoHibernate<Product> implements Product
 
 	@Override
 	public long getCount(Store store) {
-		return querySize("select count(*) from Product p where p.store=?", store);
+		Criteria c = getSession().createCriteria(Product.class)
+					.add(Restrictions.eq("store", store));
+		c.setProjection(Projections.rowCount());
+		
+		return (long)c.uniqueResult();
 	}
 
 	@Override
 	public void deleteProducts(Store store) {
-		getHibernateTemplate().bulkUpdate("delete from Product p where p.store.id = " + store.getId());
+		this.executeHql("delete from Product p where p.store.id = " + store.getId());
 	}
 }
