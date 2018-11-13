@@ -42,6 +42,23 @@ public class PriceServiceImpl implements PriceService {
 	public Parameter findParameter(String name) throws Exception {
 		return parameterDao.findByProperty("name", name);
 	}
+	
+	@Override
+	public Parameter saveParameter(Parameter param) throws Exception {
+		Parameter oldParam = parameterDao.findByProperty("name", param.getName());
+		if (oldParam == null) {
+			parameterDao.save(param);
+			return param;
+		} else {
+			oldParam.setValue(param.getValue());
+			if (param.getDescription() != null) {
+				oldParam.setDescription(param.getDescription());
+			}
+			parameterDao.saveOrUpdate(oldParam);
+			
+			return oldParam;
+		}
+	}
 
 	@Override
 	public List<Store> findAllStores() throws Exception {

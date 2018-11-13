@@ -32,6 +32,7 @@ import net.ojava.openkit.pricespy.business.Retriever;
 import net.ojava.openkit.pricespy.entity.Product;
 import net.ojava.openkit.pricespy.entity.StoreProp;
 import net.ojava.openkit.pricespy.gui.ProductViewer;
+import net.ojava.openkit.pricespy.gui.compare.DataCache;
 
 public class QueryPricePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -43,6 +44,7 @@ public class QueryPricePanel extends JPanel {
 	private JTextField nameField = new JTextField(20);
 	private JButton searchBtn = new JButton("搜索");
 	
+	private JButton compareBtn = new JButton("加入比对");
 	private JButton updateBtn = new JButton("更新产品");
 	
 	private ProductViewer productViewer = new ProductViewer();
@@ -56,18 +58,18 @@ public class QueryPricePanel extends JPanel {
 	
 	private void initComponents() {
 		JPanel searchPanel = new JPanel();
-		searchPanel.setBorder(new TitledBorder(new EmptyBorder(5, 5, 5, 5), "搜索条件"));
-		searchPanel.setLayout(new BorderLayout());
+		searchPanel.setBorder(new TitledBorder(new EtchedBorder(), "搜索条件"));
+		searchPanel.setLayout(new BorderLayout(5, 5));
 		
 		JPanel fieldPanel = new JPanel();
 		fieldPanel.setBorder(new EmptyBorder(0, 5, 0, 5));
 		fieldPanel.setLayout(new BorderLayout());
-		fieldPanel.add(new JLabel("名称"), BorderLayout.WEST);
+		fieldPanel.add(new JLabel("名称:"), BorderLayout.WEST);
 		fieldPanel.add(nameField);
 		
 		searchPanel.add(fieldPanel);
 		searchPanel.add(searchBtn, BorderLayout.EAST);
-		searchPanel.add(new JLabel("搜索内容例子: 康维他 蜂蜜"), BorderLayout.NORTH);
+		searchPanel.add(new JLabel("比如: 康维他 蜂蜜 20+ (用空格或者逗号间隔开来)"), BorderLayout.NORTH);
 		
 		this.setBorder(new EmptyBorder(5, 5, 7, 5));
 		this.setLayout(new BorderLayout());
@@ -92,6 +94,7 @@ public class QueryPricePanel extends JPanel {
 		
 		JPanel viewBtnPanel = new JPanel();
 		viewBtnPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+		viewBtnPanel.add(compareBtn);
 		viewBtnPanel.add(updateBtn);
 		viewPanel.add(viewBtnPanel, BorderLayout.NORTH);
 		cp.add(viewPanel, BorderLayout.EAST);
@@ -132,11 +135,17 @@ public class QueryPricePanel extends JPanel {
 				doUpdateProduct();
 			}
 		});
+		compareBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				doCompareProduct();
+			}
+		});
 	}
 	
 	private void updateComponentStatus() {
 		int index = productTable.getSelectedRow();
-		if (index >= 0 && index < productTableModel.getRowCount()) {
+		Product product = productTableModel.getProduct(index);
+		if (product != null) {
 			updateBtn.setEnabled(true);
 		} else {
 			updateBtn.setEnabled(false);
@@ -243,5 +252,14 @@ public class QueryPricePanel extends JPanel {
 				t.start();
 			}
 		}
+	}
+	
+	private void doCompareProduct() {
+		int index = productTable.getSelectedRow();
+		final Product product = productTableModel.getProduct(index);
+		if (product == null)
+			return;
+		
+		DataCache.getInstance().addProduct(product);
 	}
 }

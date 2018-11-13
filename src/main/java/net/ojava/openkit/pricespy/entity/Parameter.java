@@ -14,6 +14,9 @@ import org.hibernate.annotations.GenericGenerator;
 @XmlRootElement
 public class Parameter extends BaseEntity {
 	private static final long serialVersionUID = 2086040663326998265L;
+	
+	public static String EXCHANGE_RATE = "exchange_rate";
+	public static String PROFIT_RATE = "profit_rate";
 
 	private Integer id;
 	private String name;

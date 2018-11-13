@@ -91,4 +91,26 @@ public class Product extends BaseEntity {
 		this.setCnPrice(product.getCnPrice());
 		this.setPicUrl(product.getPicUrl());
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Product) {
+			Product p = (Product)obj;
+			
+			if (p.getId() == null || this.getId() == null)
+				return false;
+			
+			return p.getId().intValue() == this.getId();
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		if (this.getId() == null)
+			return super.hashCode();
+		
+		return this.getId().hashCode();
+	}
 }

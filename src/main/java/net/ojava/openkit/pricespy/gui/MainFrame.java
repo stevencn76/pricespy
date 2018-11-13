@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 
+import net.ojava.openkit.pricespy.gui.compare.ComparePricePanel;
 import net.ojava.openkit.pricespy.gui.query.QueryPricePanel;
 import net.ojava.openkit.pricespy.gui.sync.SyncProductPanel;
 import net.ojava.openkit.pricespy.res.Resource;

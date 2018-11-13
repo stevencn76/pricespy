@@ -10,6 +10,7 @@ import net.ojava.openkit.pricespy.entity.StoreProp;
 public interface PriceService {
 	public List<Parameter> findAllParameters() throws Exception;
 	public Parameter findParameter(String name) throws Exception;
+	public Parameter saveParameter(Parameter param) throws Exception;
 	
 	public List<Store> findAllStores() throws Exception;
 	public Store saveStore(Store store) throws Exception;

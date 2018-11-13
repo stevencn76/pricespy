@@ -17,6 +17,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import net.ojava.openkit.pricespy.gui.MainFrame;
+import net.ojava.openkit.pricespy.gui.compare.ParamCache;
 import net.ojava.openkit.pricespy.res.Resource;
 import net.ojava.openkit.pricespy.service.PriceService;
 
@@ -106,11 +107,14 @@ public class Main {
 			return false;
 		}
 		
+		ParamCache.getInstance().load();
+		
 		return true;
 	}
 	
 	public static void destroyApp() {
 		try {
+			ParamCache.getInstance().save();
 		} catch (Throwable e) {
 			log.debug("exitApp", e);
 		}
