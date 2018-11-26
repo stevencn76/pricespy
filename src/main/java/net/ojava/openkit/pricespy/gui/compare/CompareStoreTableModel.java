@@ -7,6 +7,7 @@ import javax.swing.table.AbstractTableModel;
 
 import net.ojava.openkit.pricespy.entity.Product;
 import net.ojava.openkit.pricespy.entity.Store;
+import net.ojava.openkit.pricespy.util.NumberUtil;
 
 public class CompareStoreTableModel extends AbstractTableModel implements IDataCacheListener {
 	private static final long serialVersionUID = 1L;
@@ -60,8 +61,16 @@ public class CompareStoreTableModel extends AbstractTableModel implements IDataC
 					total += tp.getNzPrice();
 				}
 				total = total * ParamCache.getInstance().getExchangeRates() * ParamCache.getInstance().getProfitRates();
-				return "" + total;
+				return NumberUtil.double2String(total, 2);
 			}
+		}
+		return null;
+	}
+	
+	public Store getStore(int index) {
+		List<Store> storeList = DataCache.getInstance().getStores();
+		if (index >= 0 && index < storeList.size()) {
+			return storeList.get(index);
 		}
 		return null;
 	}
