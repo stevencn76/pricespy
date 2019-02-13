@@ -22,7 +22,7 @@ import net.ojava.openkit.pricespy.business.Retriever;
 import net.ojava.openkit.pricespy.business.RetrieverListener;
 import net.ojava.openkit.pricespy.business.RetrieverManager;
 import net.ojava.openkit.pricespy.entity.Store;
-import net.ojava.openkit.pricespy.util.TimeUtil;
+import net.ojava.openkit.util.TimeUtil;
 
 public class StorePanel extends JPanel implements RetrieverListener {
 	private static final long serialVersionUID = 1L;

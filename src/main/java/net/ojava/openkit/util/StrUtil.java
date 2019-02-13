@@ -1,4 +1,4 @@
-package net.ojava.openkit.pricespy.util;
+package net.ojava.openkit.util;
 
 public class StrUtil {
 	public static boolean isEmpty(String str) {

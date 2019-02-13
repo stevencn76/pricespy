@@ -1,7 +1,7 @@
 package net.ojava.openkit.pricespy.business.converter;
 
 import net.ojava.openkit.pricespy.entity.Product;
-import net.ojava.openkit.pricespy.util.StrUtil;
+import net.ojava.openkit.util.StrUtil;
 
 public class NZHConverter implements IConverter {
 

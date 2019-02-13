@@ -13,7 +13,7 @@ import net.ojava.openkit.pricespy.entity.Product;
 import net.ojava.openkit.pricespy.entity.Store;
 import net.ojava.openkit.pricespy.entity.StoreProp;
 import net.ojava.openkit.pricespy.util.HttpClientKeepSession;
-import net.ojava.openkit.pricespy.util.StrUtil;
+import net.ojava.openkit.util.StrUtil;
 
 public class Retriever implements Runnable {
 	private static Logger LOG = Logger.getLogger(Retriever.class);

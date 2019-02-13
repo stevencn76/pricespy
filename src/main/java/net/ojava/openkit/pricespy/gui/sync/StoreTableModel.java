@@ -11,7 +11,7 @@ import net.ojava.openkit.pricespy.app.Main;
 import net.ojava.openkit.pricespy.business.Retriever;
 import net.ojava.openkit.pricespy.business.RetrieverManager;
 import net.ojava.openkit.pricespy.entity.Store;
-import net.ojava.openkit.pricespy.util.TimeUtil;
+import net.ojava.openkit.util.TimeUtil;
 
 public class StoreTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;

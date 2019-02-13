@@ -34,6 +34,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 
+import net.ojava.openkit.util.StrUtil;
+
 public class HttpClientKeepSession {
 	private static final Logger LOG = Logger.getLogger(HttpClientKeepSession.class);
 	private static final String DEFALUT_ENCODE = "utf-8";

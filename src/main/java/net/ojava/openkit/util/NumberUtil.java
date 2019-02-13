@@ -1,4 +1,4 @@
-package net.ojava.openkit.pricespy.util;
+package net.ojava.openkit.util;
 
 import java.text.NumberFormat;
 import java.util.Set;

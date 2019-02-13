@@ -6,7 +6,7 @@ import javax.swing.table.AbstractTableModel;
 
 import net.ojava.openkit.pricespy.entity.Product;
 import net.ojava.openkit.pricespy.entity.Store;
-import net.ojava.openkit.pricespy.util.NumberUtil;
+import net.ojava.openkit.util.NumberUtil;
 
 public class CompareProductTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
