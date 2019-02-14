@@ -40,7 +40,7 @@ public class Group {
 		StringBuilder sb = new StringBuilder();
 		sb.append(player1)
 			.append(" : ")
-			.append(player1)
+			.append(player2)
 			.append(" (")
 			.append(umpire)
 			.append(")");
