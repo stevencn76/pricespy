@@ -1,4 +1,4 @@
-package net.ojava.openkit.groupplayer;
+package net.ojava.openkit.groupplayer.business;
 
 public class Group {
 	private Player player1;

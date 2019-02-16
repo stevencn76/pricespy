@@ -3,6 +3,10 @@ package net.ojava.openkit.groupplayer;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.ojava.openkit.groupplayer.business.Group;
+import net.ojava.openkit.groupplayer.business.GroupAllocator;
+import net.ojava.openkit.groupplayer.business.Player;
+
 public class App {
 
 	public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package net.ojava.openkit.groupplayer;
+package net.ojava.openkit.groupplayer.business;
 
 import java.util.ArrayList;
 import java.util.HashSet;
