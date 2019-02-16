@@ -6,19 +6,19 @@ import java.util.List;
 import java.util.Set;
 
 public class GroupGenerator {
-	private List<String> playerList = new ArrayList<String>();
+	private List<Player> playerList = new ArrayList<Player>();
 	private int nextRound = 0;
 	
-	public GroupGenerator(List<String> playerList) {
+	public GroupGenerator(List<Player> playerList) {
 		setPlayerList(playerList);
 	}
 	
-	public void setPlayerList(List<String> playerList) {
+	public void setPlayerList(List<Player> playerList) {
 		this.playerList.clear();
 		this.playerList.addAll(playerList);
 	}
 	
-	public List<String> getPlayerList() {
+	public List<Player> getPlayerList() {
 		return this.playerList;
 	}
 	
@@ -53,6 +53,8 @@ public class GroupGenerator {
 		while(groups.size() > 0) {
 			pickNextGroup(result, groups);
 		}
+		
+		groups.addAll(result);
 	}
 	
 	private void pickNextGroup(List<Group> result, List<Group> players) {
@@ -61,37 +63,41 @@ public class GroupGenerator {
 		} else {
 			int index = -1;
 			int round = nextRound;
-			Set<String> inSet = new HashSet<String>();
-			Set<String> outSet = new HashSet<String>();
-			while(index == -1 && round >= 0) {
+			Set<Player> inSet = new HashSet<Player>();
+			Set<Player> outSet = new HashSet<Player>();
+			while(index == -1 && round >= -1) {
 				inSet.clear();
 				outSet.clear();
 				
 				int prev = result.size() - 1 - round;
-				if (prev >= 0) {
+				if (prev >= 0 && prev < result.size()) {
 					Group tg = result.get(prev);
 					inSet.add(tg.getPlayer1());
-					inSet.addA(tg.getPlayer2());
+					inSet.add(tg.getPlayer2());
 				}
 				
 				int next = prev + 1;
 				if (next < 0)	next = 0;
 				
 				for(int i=next; i<result.size(); i++) {
-					
+					Group tg = result.get(i);
+					outSet.add(tg.getPlayer1());
+					outSet.add(tg.getPlayer2());
 				}
-				index = pickGroup();
+				index = pickGroup(inSet, outSet, players);
+
+				round--;
 			}
 			result.add(players.remove(index));
 		}
 	}
 	
-	private int pickGroup(Set<String> inSet, Set<String> notInSet, List<Group> groups) {
+	private int pickGroup(Set<Player> inSet, Set<Player> notInSet, List<Group> groups) {
 		int res=-1;
 		for(int i=0; i<groups.size(); i++) {
 			Group tg = groups.get(i);
 			if(
-					(inSet.contains(tg.getPlayer1()) || inSet.contains(tg.getPlayer2())) 
+					(inSet.size() == 0 || inSet.contains(tg.getPlayer1()) || inSet.contains(tg.getPlayer2())) 
 					&& 
 					!notInSet.contains(tg.getPlayer1())
 					&&

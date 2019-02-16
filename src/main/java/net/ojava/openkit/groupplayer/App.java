@@ -7,8 +7,8 @@ public class App {
 
 	public static void main(String[] args) {
 		try {
-			List<String> playerList = readList(null);
-			List<Group> groupList = generateGroups(playerList);
+			List<Player> playerList = readList(null);
+			List<Group> groupList = allocateGroups(playerList);
 			for(Group g : groupList) {
 				System.out.println(g);
 			}
@@ -17,19 +17,23 @@ public class App {
 		}
 	}
 
-	private static List<String> readList(String inputFileName) throws Exception {
-		List<String> playerList = new ArrayList<String>();
+	private static List<Player> readList(String inputFileName) throws Exception {
+		List<Player> playerList = new ArrayList<Player>();
 		
-		playerList.add("A");
-		playerList.add("B");
-		playerList.add("C");
-		playerList.add("D");
+		playerList.add(new Player("A"));
+		playerList.add(new Player("B"));
+		playerList.add(new Player("C"));
+		playerList.add(new Player("D"));
+		playerList.add(new Player("E"));
+		playerList.add(new Player("F"));
+		playerList.add(new Player("G"));
+		playerList.add(new Player("H"));
 		
 		return playerList;
 	}
 	
-	private static List<Group> generateGroups(List<String> playerList) throws Exception {
-		GroupGenerator gg = new GroupGenerator(playerList);
-		return gg.generate();
+	private static List<Group> allocateGroups(List<Player> playerList) throws Exception {
+		GroupAllocator ga = new GroupAllocator(playerList);
+		return ga.generate();
 	}
 }
